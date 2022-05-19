@@ -4,22 +4,9 @@
  */
 package com.argentinaPrograma.portfolio.service;
 
-import com.argentinaPrograma.portfolio.dto.EducacionDto;
-import com.argentinaPrograma.portfolio.dto.ExperienciaDto;
-import com.argentinaPrograma.portfolio.dto.LocalidadDto;
 
-
-import com.argentinaPrograma.portfolio.dto.PerfilDto;
-
-import com.argentinaPrograma.portfolio.dto.RedSocialDto;
-
-import com.argentinaPrograma.portfolio.model.Educacion;
-import com.argentinaPrograma.portfolio.model.Experiencia;
-import com.argentinaPrograma.portfolio.model.Localidad;
-
-
-import com.argentinaPrograma.portfolio.model.Perfil;
-import com.argentinaPrograma.portfolio.model.Perfil_has_RedSocial;
+import com.argentinaPrograma.portfolio.dto.*;
+import com.argentinaPrograma.portfolio.model.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +24,14 @@ public class PasaADto {
     complejas quen o pueden ser tratadas mediante funciones estaticas
     */
 
+    public static SkillDto skill (Skill skillOrig){
+        SkillDto skillDto = new SkillDto();
+        skillDto.setId(skillOrig.getId());
+        skillDto.setDescripcion(skillOrig.getDescripcion());
+        skillDto.setPorcentaje(skillOrig.getPorcentaje());
+        skillDto.setIdTipoSkill(skillOrig.getTipoSkill().getId());
+        return skillDto;
+    }
     public static PerfilDto perfil(Perfil perf){
         PerfilDto perfDto = new PerfilDto();
         perfDto.setId(perf.getId());
@@ -70,6 +65,7 @@ public class PasaADto {
         eduDto.setDescripcion(edu.getDescripcion());          
         eduDto.setNombreInstitucion(edu.getInstitucion().getNombre());
         eduDto.setFotoInstitucionUrl(edu.getInstitucion().getLogoUrl());
+        eduDto.setIdTipoEdu(edu.getTipoEducacion().getId());
         return eduDto;
     }
   
@@ -97,6 +93,7 @@ public class PasaADto {
         return redDto;
     }
     
+   
     /*
     DEPRECATED
     */

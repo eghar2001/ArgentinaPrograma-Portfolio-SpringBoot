@@ -4,12 +4,21 @@
  */
 package com.argentinaPrograma.portfolio.model;
 
-import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+
+import java.io.Serializable;
+import java.util.List;
+
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,6 +38,11 @@ public class TipoSkill implements Serializable {
     
     @Column(name="descripcion")
     private String descripcion;
+    
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, mappedBy="tipoSkill",cascade=CascadeType.ALL)
+    private List<Skill> skills;
+    
 
     @Override
     public String toString() {

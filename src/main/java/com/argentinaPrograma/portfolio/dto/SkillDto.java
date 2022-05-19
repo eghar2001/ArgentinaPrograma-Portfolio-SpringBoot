@@ -4,32 +4,29 @@
  */
 package com.argentinaPrograma.portfolio.dto;
 
-import com.argentinaPrograma.portfolio.model.Educacion;
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
-
 
 /**
  *
  * @author nahux
  */
 @Getter @Setter
-public class PortfolioDto {
-    private PerfilDto perfil;
+public class SkillDto {
+    private Long id;
+    
+    private String descripcion;
+    
+    private int porcentaje;
+    
+    private Long idPerfil;
+    
+    /*
+    Estos atributos solo sirven para la 
+    recepcion en el backend
+    */
     
     
-
-    
-    
-    private List<EducacionDto> educaciones;
-    private List<SkillDto> skills;
-    
-   
-    private List<ExperienciaDto> experiencias;
-    
-    
-   
+    private Long idTipoSkill;
     
 }
