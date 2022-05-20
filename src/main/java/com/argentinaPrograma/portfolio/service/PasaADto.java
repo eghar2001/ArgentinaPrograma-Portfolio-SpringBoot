@@ -20,10 +20,19 @@ import org.springframework.stereotype.Service;
 public class PasaADto {
     /*
     Servicio que contiene funciones estaticas que pasan a dto cada tipo de dto
-    Exceptuando el PortfolioDto ya que contiene estructuras de datos un poco mas 
-    complejas quen o pueden ser tratadas mediante funciones estaticas
+        Solamente tiene los datos utiles para el manejo en el frontend
     */
 
+    public static ProyectoDto proyecto(Proyecto proy){
+        ProyectoDto proyDto = new ProyectoDto();
+        proyDto.setId(proy.getId());
+        proyDto.setNombre(proy.getNombre());
+        proyDto.setDescripcion(proy.getDescripcion());
+        proyDto.setIdPerfil(proy.getPerfil().getId());
+        proyDto.setUrl(proy.getUrl());
+        proyDto.setFondoUrl(proy.getFondoUrl());
+        return proyDto;
+    }
     public static SkillDto skill (Skill skillOrig){
         SkillDto skillDto = new SkillDto();
         skillDto.setId(skillOrig.getId());

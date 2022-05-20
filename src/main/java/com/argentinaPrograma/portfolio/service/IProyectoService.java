@@ -14,5 +14,10 @@ import java.util.List;
 public interface IProyectoService {
     public List<Proyecto> getProyectos();
     
-    public void saveProyecto(Proyecto proyecto);
+    public Proyecto saveProyecto(Proyecto proyecto);
+    
+    public void deleteProyecto(Long id);
+    
+    public Proyecto findById(Long id);
+
 }

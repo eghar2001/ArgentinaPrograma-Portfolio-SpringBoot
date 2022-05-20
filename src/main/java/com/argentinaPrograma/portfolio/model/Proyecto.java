@@ -43,4 +43,7 @@ public class Proyecto implements Serializable {
     @Column(name="url")
     private String url;
     
+    @Column(name="fondo_url")
+    private String fondoUrl;
+    
 }

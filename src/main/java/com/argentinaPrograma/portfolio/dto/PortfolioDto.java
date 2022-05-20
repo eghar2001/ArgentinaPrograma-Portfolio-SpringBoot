@@ -22,7 +22,7 @@ public class PortfolioDto {
     
 
     
-    
+    private List<ProyectoDto> proyectos;
     private List<EducacionDto> educaciones;
     private List<SkillDto> skills;
     

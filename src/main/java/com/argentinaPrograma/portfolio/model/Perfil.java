@@ -91,6 +91,10 @@ public class Perfil implements Serializable {
     @OneToMany(cascade = CascadeType.ALL,mappedBy="perfil")
     private List<Skill> skills;
     
+    @JsonIgnore
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="perfil")
+    private List<Proyecto> proyectos;
+    
     @Override
     public String toString(){
         return "nombre: "+this.nombre+" apellido: "+this.apellido + " fecha nacimiento: "+this.fechaNac+" localidad: ";

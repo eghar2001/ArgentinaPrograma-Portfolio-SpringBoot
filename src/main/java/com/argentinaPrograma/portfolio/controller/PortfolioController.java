@@ -9,11 +9,13 @@ import com.argentinaPrograma.portfolio.dto.EducacionByTipoDto;
 import com.argentinaPrograma.portfolio.dto.EducacionDto;
 import com.argentinaPrograma.portfolio.dto.ExperienciaDto;
 import com.argentinaPrograma.portfolio.dto.PortfolioDto;
+import com.argentinaPrograma.portfolio.dto.ProyectoDto;
 import com.argentinaPrograma.portfolio.dto.SkillDto;
 import com.argentinaPrograma.portfolio.dto.SkillsByTipoDto;
 import com.argentinaPrograma.portfolio.model.Educacion;
 import com.argentinaPrograma.portfolio.model.Experiencia;
 import com.argentinaPrograma.portfolio.model.Perfil;
+import com.argentinaPrograma.portfolio.model.Proyecto;
 import com.argentinaPrograma.portfolio.model.Skill;
 import com.argentinaPrograma.portfolio.model.TipoEducacion;
 import com.argentinaPrograma.portfolio.model.TipoSkill;
@@ -62,31 +64,17 @@ public class PortfolioController {
         PortfolioDto portfolio = new PortfolioDto();
         //Asigno Perfil
         Perfil perfil = this.perfilServ.getPerfilById(id_perfil);
-        portfolio.setPerfil(PasaADto.perfil(perfil));        
+        portfolio.setPerfil(PasaADto.perfil(perfil));   
+        
         /*
         Asigno listado de educaciones by tipo
-        */
-       /* List<EducacionByTipoDto> educacionesByTipoDto = new ArrayList<>();
-        List<TipoEducacion> tiposEdu = this.tipoEduServ.getTipoEstudios();
-        for(TipoEducacion tipo:tiposEdu){
-            EducacionByTipoDto eduByTipoDto = new EducacionByTipoDto();
-            eduByTipoDto.setTipoEdu(tipo);
-                        
-            List<Educacion> educacionesByTipo = this.eduServ.getEducacionByPerfAndTipo(id_perfil, tipo.getId());
-            List<EducacionDto> edusDtoByTipo = new ArrayList<>();
-            for(Educacion edu: educacionesByTipo){
-                edusDtoByTipo.add(PasaADto.educacion(edu));
-            }
-            eduByTipoDto.setEducaciones(edusDtoByTipo);
-            educacionesByTipoDto.add(eduByTipoDto);
-        }
-        portfolio.setEducacionesByTipo(educacionesByTipoDto);    */
-       
+        */       
         List<EducacionDto> educacionesDto = new ArrayList<>();
         for(Educacion edu:perfil.getEducaciones()){
             educacionesDto.add(PasaADto.educacion(edu));
         }
         portfolio.setEducaciones(educacionesDto);
+        
         /*
         Agrego Experiencias        
         */
@@ -99,27 +87,24 @@ public class PortfolioController {
         /*
         Agrego Skills
         */
-       /* List<SkillsByTipoDto> skillsByTipos = new ArrayList<>();
-        List<TipoSkill>tipos = this.tipoSkillServ.getTiposSkill();
-        for(TipoSkill tipo:tipos){
-            SkillsByTipoDto skillsByTipo = new SkillsByTipoDto();
-            skillsByTipo.setTipoSkill(tipo);
-            List<SkillDto> skillsDto = new ArrayList<>();
-            for(Skill skill:tipo.getSkills()){
-                skillsDto.add(PasaADto.skill(skill));
-            }
-            skillsByTipo.setSkills(skillsDto);            
-        }
-        portfolio.setSkillsByTipo(skillsByTipos);*/
-       
        List<SkillDto> skillsDto = new ArrayList<>();
        for(Skill skill:perfil.getSkills()){
            skillsDto.add(PasaADto.skill(skill));
        }
        portfolio.setSkills(skillsDto);
         
+       /*
+       Agrego Proyectos
+       */
+       List<ProyectoDto> proysDto = new ArrayList<>();
+       for(Proyecto proy:perfil.getProyectos()){
+           ProyectoDto proyDto = PasaADto.proyecto(proy);
+           proysDto.add(proyDto);
+           System.out.println(proyDto);
+       }
+       portfolio.setProyectos(proysDto);
         
        
-        return portfolio;
+       return portfolio;
     } 
 }
