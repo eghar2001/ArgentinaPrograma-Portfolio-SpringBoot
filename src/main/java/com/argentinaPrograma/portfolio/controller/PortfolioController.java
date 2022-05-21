@@ -100,7 +100,7 @@ public class PortfolioController {
        for(Proyecto proy:perfil.getProyectos()){
            ProyectoDto proyDto = PasaADto.proyecto(proy);
            proysDto.add(proyDto);
-           System.out.println(proyDto);
+          
        }
        portfolio.setProyectos(proysDto);
         

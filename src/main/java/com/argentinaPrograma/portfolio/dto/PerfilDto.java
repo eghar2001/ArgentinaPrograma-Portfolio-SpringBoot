@@ -42,5 +42,5 @@ public class PerfilDto {
     private String provincia;
     
     
-     private List<RedSocialDto> redesSociales;
+     private List<RedPerfilDto> redesSociales;
 }

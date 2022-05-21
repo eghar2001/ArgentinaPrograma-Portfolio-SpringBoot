@@ -20,5 +20,7 @@ public interface IRedSocialService {
     
     public void deleteRedSocialById(Long id);
     
+    public List<RedSocial> getRedesFaltantes(Long idPerfil);
+    
     
 }

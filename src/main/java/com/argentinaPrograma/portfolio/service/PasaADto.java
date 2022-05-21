@@ -59,9 +59,9 @@ public class PasaADto {
         /*
         Agrego Redes Sociales
         */
-        List<RedSocialDto> redesSociales = new ArrayList<>();
+        List<RedPerfilDto> redesSociales = new ArrayList<>();
         for(Perfil_has_RedSocial red:perf.getRedesSociales()){
-            redesSociales.add(redSocial(red));
+            redesSociales.add(redPerfil(red));
         }
         perfDto.setRedesSociales(redesSociales);
         return perfDto;
@@ -93,12 +93,10 @@ public class PasaADto {
         return expDto;
         
     }
-    public static RedSocialDto redSocial(Perfil_has_RedSocial perfil_red){
-        RedSocialDto redDto = new RedSocialDto();
+    public static RedPerfilDto redPerfil(Perfil_has_RedSocial perfil_red){
+        RedPerfilDto redDto = new RedPerfilDto();
+        redDto.setRedSocial(perfil_red.getRedSocial());
         redDto.setUrl(perfil_red.getRedSocialUrl());
-        redDto.setNombreRedSocial(perfil_red.getRedSocial().getNombre());
-        redDto.setClaseBoxIcon(perfil_red.getRedSocial().getClaseBoxIcon());
-        redDto.setColor(perfil_red.getRedSocial().getColor());
         return redDto;
     }
     

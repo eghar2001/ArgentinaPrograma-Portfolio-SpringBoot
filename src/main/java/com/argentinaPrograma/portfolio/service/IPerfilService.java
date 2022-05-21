@@ -6,6 +6,7 @@ package com.argentinaPrograma.portfolio.service;
 
 import com.argentinaPrograma.portfolio.model.Perfil;
 import com.argentinaPrograma.portfolio.model.Perfil_has_RedSocial;
+import com.argentinaPrograma.portfolio.model.Perfil_has_RedSocial_ID;
 import java.util.List;
 
 /**
@@ -21,5 +22,8 @@ public interface IPerfilService {
     
     public void deletePérfilById(Long id);
     
-    public void agregaRedSocial(Perfil_has_RedSocial redSocial);
+    public Perfil_has_RedSocial savePerfilRed(Perfil_has_RedSocial perfil_red);
+    
+    public void deletePerfilRed(Perfil_has_RedSocial_ID id);
+    
 }

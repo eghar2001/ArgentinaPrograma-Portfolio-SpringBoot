@@ -40,4 +40,9 @@ public class RedSocialService implements IRedSocialService {
     public RedSocial getRedSocialById(Long id){
         return this.redSocialRepo.findById(id).orElse(null);
     }
+    
+    @Override
+     public List<RedSocial> getRedesFaltantes(Long idPerfil){
+         return this.redSocialRepo.getRedesFaltantes(idPerfil);
+     }
 }

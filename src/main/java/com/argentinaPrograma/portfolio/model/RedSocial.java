@@ -42,4 +42,11 @@ public class RedSocial implements Serializable{
     @JsonIgnore
     @OneToMany(cascade = CascadeType.REMOVE,mappedBy="redSocial")
     private List<Perfil_has_RedSocial> perfiles;
+
+    @Override
+    public String toString() {
+        return "RedSocial{" + "id=" + id + ", nombre=" + nombre + ", claseBoxIcon=" + claseBoxIcon + ", color=" + color + ", perfiles=" + perfiles + '}';
     }
+    
+    
+   }

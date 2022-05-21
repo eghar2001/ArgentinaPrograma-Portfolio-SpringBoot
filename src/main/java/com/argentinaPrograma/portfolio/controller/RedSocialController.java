@@ -4,10 +4,13 @@
  */
 package com.argentinaPrograma.portfolio.controller;
 
+
 import com.argentinaPrograma.portfolio.model.RedSocial;
 import com.argentinaPrograma.portfolio.service.IRedSocialService;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author nahux
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/redSocial")
 public class RedSocialController {
     @Autowired
@@ -31,7 +35,14 @@ public class RedSocialController {
     @GetMapping("/traer")
     @ResponseBody
     public List<RedSocial> getRedesSociales(){
+       
         return this.redSocialServ.getRedesSociales();
+        
+    }
+    
+    @GetMapping("/traer/redesFaltantes/{idPerfil}")
+    public List<RedSocial> getRedesFaltantes(@PathVariable Long idPerfil){
+        return this.redSocialServ.getRedesFaltantes(idPerfil);
     }
     
     @PostMapping("/crear")
@@ -50,6 +61,7 @@ public class RedSocialController {
     
     @DeleteMapping("/borrar/{id}")
     public void deleteRedSocial(@PathVariable Long id){
+        
         this.redSocialServ.deleteRedSocialById(id);
     }
 }

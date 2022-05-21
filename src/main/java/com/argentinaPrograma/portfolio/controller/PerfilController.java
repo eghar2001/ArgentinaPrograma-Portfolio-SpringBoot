@@ -6,18 +6,21 @@ package com.argentinaPrograma.portfolio.controller;
 
 
 import com.argentinaPrograma.portfolio.dto.PerfilDto;
-import com.argentinaPrograma.portfolio.dto.RedSocialDto;
+import com.argentinaPrograma.portfolio.dto.RedPerfilDto;
+
 import com.argentinaPrograma.portfolio.model.Localidad;
 
 import com.argentinaPrograma.portfolio.model.Perfil;
 import com.argentinaPrograma.portfolio.model.Perfil_has_RedSocial;
 import com.argentinaPrograma.portfolio.model.Perfil_has_RedSocial_ID;
 import com.argentinaPrograma.portfolio.model.Provincia;
+
 import com.argentinaPrograma.portfolio.service.Fecha;
 import com.argentinaPrograma.portfolio.service.ILocalidadService;
 
 import com.argentinaPrograma.portfolio.service.IPerfilService;
 import com.argentinaPrograma.portfolio.service.IProvinciaService;
+import com.argentinaPrograma.portfolio.service.IRedSocialService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
 
 
@@ -57,6 +60,11 @@ public class PerfilController {
     @Autowired
     private IProvinciaService provServ;
     
+    @Autowired
+    private IRedSocialService redServ;
+    
+   
+    
 
     
     
@@ -78,22 +86,7 @@ public class PerfilController {
         return this.perfilServ.getPerfilById(id);
     }
     
-    @GetMapping("/traer/redesSociales/{id_perfil}")
-    @ResponseBody
-    public List<RedSocialDto> getRedesSociales(@PathVariable Long id_perfil){
-        Perfil perfil = this.perfilServ.getPerfilById(id_perfil);
-        List<RedSocialDto> redes = new ArrayList<>(); 
-        for(Perfil_has_RedSocial redDePerfil:perfil.getRedesSociales()){
-            String nombreRedSocial = redDePerfil.getRedSocial().getNombre();
-            String url = redDePerfil.getRedSocialUrl();
-            String claseBoxIcon = redDePerfil.getRedSocial().getClaseBoxIcon();
-            RedSocialDto red = new RedSocialDto(nombreRedSocial,url,claseBoxIcon);
-            redes.add(red);
-        }
-        return redes;
-        
-        
-    }
+  
     
     @PostMapping("/crear")
     public void createPerfil(@RequestBody Perfil perfilNuevo){
@@ -169,11 +162,74 @@ public class PerfilController {
     
     
     
-    @PutMapping("/{id_perfil}/agregaRedSocial")
-    public void agregaRedSocial(@PathVariable Long id_perfil, @RequestBody Perfil_has_RedSocial redSocial){
-        Perfil_has_RedSocial_ID redId = redSocial.getId();
-        redId.setIdPerfil(id_perfil);
-        redSocial.setId(redId);
-        this.perfilServ.agregaRedSocial(redSocial);
+    @PutMapping("/{id_perfil}/editaRedPerfil")
+    public RedPerfilDto editRedSociales(@PathVariable Long id_perfil, @RequestBody RedPerfilDto redDto){
+        
+       
+      
+            Perfil_has_RedSocial perfil_red = new Perfil_has_RedSocial();
+            
+            Perfil_has_RedSocial_ID perfil_red_id = new Perfil_has_RedSocial_ID();
+            perfil_red_id.setIdPerfil(id_perfil);
+            perfil_red_id.setIdRedSocial(redDto.getRedSocial().getId());
+            
+            perfil_red.setRedSocialUrl(redDto.getUrl());
+            perfil_red.setId(perfil_red_id);
+            perfil_red.setRedSocial(redDto.getRedSocial());
+   
+            
+            
+            
+            perfil_red = this.perfilServ.savePerfilRed(perfil_red);
+            
+       
+        return PasaADto.redPerfil(perfil_red);
     }
+    
+    @PostMapping("/{idPerfil}/agregaRedPerfil")
+    public RedPerfilDto createRedSocial(@PathVariable Long idPerfil, @RequestBody RedPerfilDto redPerfil){
+        /*
+        Entrada
+        RedPerfiLDto:{
+        redSocial:RedSocial={'id':number};
+        url:string
+        }
+        idPerfil com path variabel
+        */
+        Perfil_has_RedSocial perfil_red = new Perfil_has_RedSocial();
+        /*
+        Creamos el composite id
+        */
+        Perfil_has_RedSocial_ID perfil_red_id = new Perfil_has_RedSocial_ID();
+        perfil_red_id.setIdPerfil(idPerfil);
+        perfil_red_id.setIdRedSocial(redPerfil.getRedSocial().getId());
+        /*
+        Seteamos el id y la url
+        */
+        perfil_red.setId(perfil_red_id);
+        perfil_red.setRedSocialUrl(redPerfil.getUrl());
+        perfil_red.setRedSocial(redPerfil.getRedSocial());
+        
+        Perfil perf = this.perfilServ.getPerfilById(idPerfil);
+        perfil_red.setPerfil(perf);
+        
+        /*
+        Guardamos
+        */
+        perfil_red = this.perfilServ.savePerfilRed(perfil_red);
+        
+        return PasaADto.redPerfil(perfil_red);        
+    }
+    @DeleteMapping("/{idPerfil}/borraRedPerfil/{idRed}")
+    public void deleteRedSocial(@PathVariable Long idPerfil, @PathVariable Long idRed){
+        System.out.println(idPerfil + " "+idRed);
+        Perfil_has_RedSocial_ID idRedPerf = new Perfil_has_RedSocial_ID();
+        
+        idRedPerf.setIdPerfil(idPerfil);
+        idRedPerf.setIdRedSocial(idRed);
+        this.perfilServ.deletePerfilRed(idRedPerf);
+    }
+    
+    
+    
 }

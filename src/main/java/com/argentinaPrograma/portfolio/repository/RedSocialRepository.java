@@ -4,8 +4,13 @@
  */
 package com.argentinaPrograma.portfolio.repository;
 
+
 import com.argentinaPrograma.portfolio.model.RedSocial;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,5 +19,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RedSocialRepository extends JpaRepository<RedSocial,Long>{
-    
+   @Query( value = "SELECT * FROM redSocial r WHERE r.id NOT IN (SELECT id_red_social FROM perfil_has_redsocial p WHERE p.id_perfil = ?1);",nativeQuery = true)
+   public List<RedSocial> getRedesFaltantes(Long idPerf);
+   
 }
