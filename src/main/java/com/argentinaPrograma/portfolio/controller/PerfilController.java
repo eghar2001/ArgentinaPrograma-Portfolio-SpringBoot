@@ -5,6 +5,7 @@
 package com.argentinaPrograma.portfolio.controller;
 
 
+import com.argentinaPrograma.portfolio.dto.AboutDto;
 import com.argentinaPrograma.portfolio.dto.PerfilDto;
 import com.argentinaPrograma.portfolio.dto.RedPerfilDto;
 
@@ -230,6 +231,11 @@ public class PerfilController {
         this.perfilServ.deletePerfilRed(idRedPerf);
     }
     
-    
+    @PutMapping("/{idPerfil}/editaAbout")
+    public void editAbout(@PathVariable Long idPerfil,@RequestBody AboutDto ab){
+        Perfil perf = this.perfilServ.getPerfilById(idPerfil);
+        perf.setAbout(ab.getAbout());
+        this.perfilServ.savePerfil(perf);
+    }
     
 }

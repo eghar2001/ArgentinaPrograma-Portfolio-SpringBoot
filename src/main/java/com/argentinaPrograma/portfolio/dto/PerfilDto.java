@@ -33,7 +33,7 @@ public class PerfilDto {
     
     private String profesion;
     
- 
+    private String about;
     
     private String perfilUrl;
 

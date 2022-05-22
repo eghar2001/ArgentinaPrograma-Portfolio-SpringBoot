@@ -47,6 +47,7 @@ public class PasaADto {
         perfDto.setNombre(perf.getNombre());
         perfDto.setApellido(perf.getApellido());
         perfDto.setLocalidad(perf.getLocalidad().getNombre());
+        perfDto.setAbout(perf.getAbout());
         perfDto.setProvincia(perf.getLocalidad().getProvincia().getNombre());
         perfDto.setFechaNac(perf.getFechaNac());
         perfDto.setProfesion(perf.getProfesion());
