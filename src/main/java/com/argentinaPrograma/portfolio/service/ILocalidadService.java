@@ -6,6 +6,7 @@ package com.argentinaPrograma.portfolio.service;
 
 import com.argentinaPrograma.portfolio.dto.LocalidadDto;
 import com.argentinaPrograma.portfolio.model.Localidad;
+import com.argentinaPrograma.portfolio.model.Provincia;
 import java.util.List;
 
 /**
@@ -14,6 +15,10 @@ import java.util.List;
  */
 
 public interface ILocalidadService {
+    
+    /*
+    Propios de Localidad
+    */
     public void saveLocalidad(Localidad loc);
     
     public void deleteLocalidad(Long id);
@@ -27,4 +32,19 @@ public interface ILocalidadService {
     public boolean existeLocalidad(Long codPostal);
     
     public Localidad getLocByNombreAndProv(String localidad, Long id_provincia);
+    
+    
+    /*
+    Los de provincis
+    */
+    public List<Provincia> getProvincias();
+    
+    public void saveProvincia(Provincia provin);
+    
+    public Provincia getProvinciaById(Long id);
+    
+    public void deleteProv(Long id);    
+    
+    public Provincia provPorNombre(String provincia);
+    
 }

@@ -5,11 +5,13 @@
 package com.argentinaPrograma.portfolio.service;
 
 import com.argentinaPrograma.portfolio.model.Educacion;
+import com.argentinaPrograma.portfolio.model.TipoEducacion;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.argentinaPrograma.portfolio.repository.EducacionRepository;
+import com.argentinaPrograma.portfolio.repository.TipoEducacionRepository;
 
 /**
  *
@@ -20,6 +22,12 @@ import com.argentinaPrograma.portfolio.repository.EducacionRepository;
 public class EducacionService implements IEducacionService {
     @Autowired
     private EducacionRepository educacionRepo;
+    
+    @Autowired
+    private TipoEducacionRepository tipoEstRepo;
+    /*
+    Propios de Educacion
+    */
     
     @Override
     public List<Educacion> getEducaciones(){
@@ -43,6 +51,26 @@ public class EducacionService implements IEducacionService {
     @Override
     public void deleteEducacionById(Long id){
         this.educacionRepo.deleteById(id);
+    }
+    
+    /*
+    De tipo educacion
+    */
+    
+    
+    @Override
+    public List<TipoEducacion> getTipoEstudios(){
+        return this.tipoEstRepo.findAll();
+    }
+    
+    @Override
+    public TipoEducacion getTipoEstudioById(Long id){
+        return this.tipoEstRepo.findById(id).orElse(null);
+    }
+    
+    @Override
+    public void saveTipoEstudio(TipoEducacion tipoEst){
+        this.tipoEstRepo.save(tipoEst);
     }
     
     

@@ -28,7 +28,7 @@ public class PasaADto {
         proyDto.setId(proy.getId());
         proyDto.setNombre(proy.getNombre());
         proyDto.setDescripcion(proy.getDescripcion());
-        proyDto.setIdPerfil(proy.getPerfil().getId());
+        proyDto.setIdPerfil(proy.getPerfil().getUsuario().getId());
         proyDto.setUrl(proy.getUrl());
         proyDto.setFondoUrl(proy.getFondoUrl());
         return proyDto;
@@ -43,7 +43,7 @@ public class PasaADto {
     }
     public static PerfilDto perfil(Perfil perf){
         PerfilDto perfDto = new PerfilDto();
-        perfDto.setId(perf.getId());
+        perfDto.setId(perf.getUsuario().getId());
         perfDto.setNombre(perf.getNombre());
         perfDto.setApellido(perf.getApellido());
         perfDto.setLocalidad(perf.getLocalidad().getNombre());
@@ -82,7 +82,7 @@ public class PasaADto {
     public static ExperienciaDto experiencia(Experiencia exp){
         ExperienciaDto expDto = new ExperienciaDto();
         expDto.setId(exp.getId());
-        expDto.setIdPerfil(exp.getPerfil().getId());
+        expDto.setIdPerfil(exp.getPerfil().getUsuario().getId());
         expDto.setNombreInstitucion(exp.getInstitucion().getNombre());
         expDto.setTipoJornada(exp.getTipoJornada());
         expDto.setFechaDesde(exp.getFechaDesde());
@@ -101,10 +101,9 @@ public class PasaADto {
         return redDto;
     }
     
-   
-    /*
-    DEPRECATED
-    */
+    
+    
+    
     public static LocalidadDto localidad(Localidad loc){
         LocalidadDto locDto = new LocalidadDto();
         locDto.setLocalidad(loc.getNombre());

@@ -4,8 +4,7 @@
  */
 package com.argentinaPrograma.portfolio.dto;
 
-import com.argentinaPrograma.portfolio.model.TipoSkill;
-import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +12,7 @@ import lombok.Setter;
  *
  * @author nahux
  */
-@Getter @Setter
-public class SkillsByTipoDto {
-    
-    private TipoSkill tipoSkill;
-    
-    private List<SkillDto> skills;
+@Getter @Setter @AllArgsConstructor
+public class Mensaje {
+    private String mensaje;
 }

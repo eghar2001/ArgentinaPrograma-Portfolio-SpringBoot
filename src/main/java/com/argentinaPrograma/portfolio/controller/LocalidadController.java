@@ -8,13 +8,12 @@ import com.argentinaPrograma.portfolio.dto.LocalidadDto;
 import com.argentinaPrograma.portfolio.model.Localidad;
 import com.argentinaPrograma.portfolio.model.Provincia;
 import com.argentinaPrograma.portfolio.service.ILocalidadService;
-
-import com.argentinaPrograma.portfolio.service.IProvinciaService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
 import com.argentinaPrograma.portfolio.verifiers.Verifiers;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,11 +37,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocalidadController {
     @Autowired
     private ILocalidadService localidadServ;
-    
-    @Autowired
-    private IProvinciaService provinServ;
-    
-  
+
+  /*
+    Endpoints propios de localidad
+    */
     @GetMapping("/traer")
     @ResponseBody
     public List<LocalidadDto> getLocalidades(){
@@ -78,7 +76,7 @@ public class LocalidadController {
     
     
     
-    
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/crear")
     public LocalidadDto crearLocalidad(@RequestBody LocalidadDto loc){
       
@@ -87,14 +85,14 @@ public class LocalidadController {
        */
        
        
-         Provincia prov = this.provinServ.provPorNombre(loc.getProvincia());
+         Provincia prov = this.localidadServ.provPorNombre(loc.getProvincia());
             if(prov == null){
                /*
                 Si no existe la provincia que ingresamos, la creamos.
                 */
                prov = new Provincia();
                prov.setNombre(loc.getProvincia());              
-               this.provinServ.saveProvincia(prov);
+               this.localidadServ.saveProvincia(prov);
                Localidad localidadNueva = new Localidad();
               
                localidadNueva.setNombre(loc.getLocalidad());
@@ -119,7 +117,7 @@ public class LocalidadController {
                    localidadNueva.setNombre(loc.getLocalidad());
                    localidadNueva.setProvincia(prov);
                    this.localidadServ.saveLocalidad(localidadNueva);
-                   return PasaADto.localidad(localidadNueva);
+                   return PasaADto.localidad(localidad);
                    
                    
                }
@@ -134,6 +132,7 @@ public class LocalidadController {
           
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/editar/{codPostal}")
     public void editLocalidad(@PathVariable Long codPostal, @RequestBody Localidad edittedLocalidad){
         Localidad returnLocalidad = this.localidadServ.getLocalidadByCodPostal(codPostal);
@@ -141,7 +140,7 @@ public class LocalidadController {
         if(Verifiers.stringNoVacia(edittedNombre)){
             returnLocalidad.setNombre(edittedNombre);
         }
-        Provincia edittedProvin = this.provinServ.getProvinciaById(edittedLocalidad.getProvincia().getId());
+        Provincia edittedProvin = this.localidadServ.getProvinciaById(edittedLocalidad.getProvincia().getId());
         returnLocalidad.setProvincia(edittedProvin);
         this.localidadServ.saveLocalidad(returnLocalidad);
     }
@@ -154,6 +153,23 @@ public class LocalidadController {
     @DeleteMapping("/borrar/{id}")
     public void deleteLocalidad(@PathVariable Long id){
         this.localidadServ.deleteLocalidad(id);
+    }
+    
+    /*
+    Endpoints de provincia
+    */
+    
+    
+    @GetMapping("/provincia/traer")
+    @ResponseBody
+    public List<Provincia> getProvins(){
+        return this.localidadServ.getProvincias();
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/provincia/crear")
+    public void createProvin(@RequestBody Provincia provin){    
+        this.localidadServ.saveProvincia(provin);
     }
 
    

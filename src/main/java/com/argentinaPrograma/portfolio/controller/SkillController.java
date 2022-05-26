@@ -11,9 +11,9 @@ import com.argentinaPrograma.portfolio.dto.SkillDto;
 import com.argentinaPrograma.portfolio.model.Perfil;
 import com.argentinaPrograma.portfolio.model.TipoSkill;
 import com.argentinaPrograma.portfolio.service.IPerfilService;
-import com.argentinaPrograma.portfolio.service.ITipoSkillService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,14 +39,16 @@ public class SkillController {
     @Autowired
     private IPerfilService perfilServ;
     
-    @Autowired
-    private ITipoSkillService tipoSkillServ;
-    
+    /*
+    Endpoints propios de Skill
+    */
     @GetMapping("/traer")
     @ResponseBody
     public List<Skill> getSkills(){
         return this.skillServ.getSkills();
     }
+    
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/crear")
     @ResponseBody
     public SkillDto createSkill(@RequestBody SkillDto skillDto){
@@ -62,20 +64,20 @@ public class SkillController {
         Perfil perf = this.perfilServ.getPerfilById(skillDto.getIdPerfil());
         savedSkill.setPerfil(perf);
         
-        TipoSkill tipo = this.tipoSkillServ.getTipoSkillById(skillDto.getIdTipoSkill());
+        TipoSkill tipo = this.skillServ.getTipoSkillById(skillDto.getIdTipoSkill());
         savedSkill.setTipoSkill(tipo);
         
         savedSkill = this.skillServ.saveSkill(savedSkill);
         return PasaADto.skill(savedSkill);
     }
     
-    
-    
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/borrar/{id}")
     public void deleteSkill(@PathVariable Long id){
         this.skillServ.deleteSkillById(id);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/editar")
     public SkillDto editSkill(@RequestBody SkillDto edittedSkill){
         Skill savedSkill = this.skillServ.getSkillById(edittedSkill.getId());
@@ -84,4 +86,22 @@ public class SkillController {
         this.skillServ.saveSkill(savedSkill);
         return PasaADto.skill(savedSkill);
     }
+    
+    /*
+    Endpoints de TipoSkill
+    */
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/tipo/traer")
+    @ResponseBody
+    public List<TipoSkill> getTiposSkill(){
+        return this.skillServ.getTiposSkill();
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/tipo/crear")
+    public void createTipoSkill(@RequestBody TipoSkill tipoSkill){
+        this.skillServ.saveTipoSkill(tipoSkill);
+    }
+    
 }

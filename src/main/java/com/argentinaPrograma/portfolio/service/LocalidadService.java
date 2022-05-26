@@ -8,6 +8,7 @@ import com.argentinaPrograma.portfolio.dto.LocalidadDto;
 import com.argentinaPrograma.portfolio.model.Localidad;
 import com.argentinaPrograma.portfolio.model.Provincia;
 import com.argentinaPrograma.portfolio.repository.LocalidadRepository;
+import com.argentinaPrograma.portfolio.repository.ProvinciaRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,14 @@ public class LocalidadService implements ILocalidadService {
     @Autowired
     private LocalidadRepository localidadRepo;
     
-   
+    @Autowired
+    private ProvinciaRepository provinRepo;
     
+
+   
+    /*
+    Los propios de Localidad
+    */
     @Override
     public void saveLocalidad(Localidad loc){
         this.localidadRepo.save(loc);
@@ -52,5 +59,37 @@ public class LocalidadService implements ILocalidadService {
     @Override
     public Localidad getLocByNombreAndProv(String localidad, Long id_provincia){
         return this.localidadRepo.getLocByNombreAndProv(localidad, id_provincia).orElse(null);
+    }
+    
+    
+    /*
+    Los propios de Provincia
+    */
+    
+  
+    
+    @Override
+    public List<Provincia> getProvincias(){
+        return this.provinRepo.findAll();
+    }
+    
+    @Override
+    public void saveProvincia(Provincia provin){
+        this.provinRepo.save(provin);
+    }
+    
+    @Override
+    public Provincia getProvinciaById(Long id){
+        return this.provinRepo.findById(id).orElse(null);
+    }
+    
+    @Override
+    public void deleteProv(Long id){  
+        this.provinRepo.deleteById(id);
+    }   
+
+    @Override
+    public Provincia provPorNombre(String provincia){
+        return this.provinRepo.getProvByNombre(provincia).orElse(null);
     }
 }

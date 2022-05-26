@@ -37,7 +37,7 @@ public class Experiencia implements Serializable{
     private Long id;
     
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @PrimaryKeyJoinColumn(name="perfil_id",referencedColumnName="id")
+    @PrimaryKeyJoinColumn(name="perfil_id",referencedColumnName="usuario_id")
     private Perfil perfil;
     
     @ManyToOne(cascade ={CascadeType.MERGE})

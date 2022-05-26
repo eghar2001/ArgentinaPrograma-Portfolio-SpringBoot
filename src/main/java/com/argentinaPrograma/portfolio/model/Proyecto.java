@@ -31,7 +31,7 @@ public class Proyecto implements Serializable {
     private Long id;
     
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="id_perfil")
+    @JoinColumn(name="usuario_id")
     private Perfil perfil;
     
     @Column(name="nombre")

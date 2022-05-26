@@ -5,6 +5,7 @@
 package com.argentinaPrograma.portfolio.service;
 
 import com.argentinaPrograma.portfolio.model.Educacion;
+import com.argentinaPrograma.portfolio.model.TipoEducacion;
 import java.util.List;
 
 /**
@@ -12,7 +13,9 @@ import java.util.List;
  * @author nahux
  */
 public interface IEducacionService {
-    
+    /*
+    Propios de educacion
+    */
     public List<Educacion> getEducaciones();
     
     public Educacion getEducacionById(Long id);
@@ -23,7 +26,15 @@ public interface IEducacionService {
     
     public void deleteEducacionById(Long id); 
     
-
     
+    /*
+    De tipo Educacion
+    */
+
+    public List<TipoEducacion> getTipoEstudios();
+    
+    public TipoEducacion getTipoEstudioById(Long id);
+    
+    public void saveTipoEstudio(TipoEducacion tipoEst);
    
 }

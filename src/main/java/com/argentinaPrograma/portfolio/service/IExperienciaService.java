@@ -5,6 +5,7 @@
 package com.argentinaPrograma.portfolio.service;
 
 import com.argentinaPrograma.portfolio.model.Experiencia;
+import com.argentinaPrograma.portfolio.model.TipoJornada;
 import java.util.List;
 
 /**
@@ -12,7 +13,9 @@ import java.util.List;
  * @author nahux
  */
 public interface IExperienciaService {
-    
+    /*
+    Propios de experiencia
+    */
     public List<Experiencia> getExperiencias();
     
     public Experiencia getExperienciaById(Long id);
@@ -20,4 +23,13 @@ public interface IExperienciaService {
     public void deleteExperienciaById(Long id);
     
     public Experiencia saveExperiencia(Experiencia experiencia);
+    
+    /*
+    De tipo jornada
+    */
+    public List<TipoJornada> getTiposJornada();
+    
+    public TipoJornada getTipoJornadaById(Long id);
+    
+    public void saveTipoJornada(TipoJornada tipoJornadaNueva);
 }

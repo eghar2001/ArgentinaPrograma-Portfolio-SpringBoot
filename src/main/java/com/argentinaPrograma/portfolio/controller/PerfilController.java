@@ -20,7 +20,6 @@ import com.argentinaPrograma.portfolio.service.Fecha;
 import com.argentinaPrograma.portfolio.service.ILocalidadService;
 
 import com.argentinaPrograma.portfolio.service.IPerfilService;
-import com.argentinaPrograma.portfolio.service.IProvinciaService;
 import com.argentinaPrograma.portfolio.service.IRedSocialService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
 
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,10 +57,7 @@ public class PerfilController {
     
     @Autowired
     private ILocalidadService locServ;
-    
-    @Autowired
-    private IProvinciaService provServ;
-    
+
     @Autowired
     private IRedSocialService redServ;
     
@@ -68,7 +65,7 @@ public class PerfilController {
     
 
     
-    
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/traer")
     @ResponseBody
     public List<Perfil> getPerfiles(){
@@ -81,6 +78,7 @@ public class PerfilController {
         
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/traer/{id}")
     @ResponseBody
     public Perfil getPerfilById(@PathVariable Long id){
@@ -89,70 +87,27 @@ public class PerfilController {
     
   
     
-    @PostMapping("/crear")
-    public void createPerfil(@RequestBody Perfil perfilNuevo){
-       
-       
-        
-        this.perfilServ.savePerfil(perfilNuevo);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/crear/{id_user}")
+    public void createPerfil(@PathVariable Long id_user,@RequestBody PerfilDto perfDto){
+        Perfil perf = dtoAPerfil(perfDto);
+        perf.setUsuario_id(id_user);
+        perf.setAbout(perfDto.getAbout());
+        this.perfilServ.savePerfil(perf);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/borrar/{id_perfil}")
     public void deletePerfil(@PathVariable Long id_perfil){
         this.perfilServ.deletePérfilById(id_perfil);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/editar/{id_perfil}")
     public PerfilDto editPerfil(@PathVariable Long id_perfil,@RequestBody PerfilDto edittedPerfil){
-        Perfil savedPerfil = this.getPerfilById(id_perfil);
-        savedPerfil.setNombre(edittedPerfil.getNombre());
-        savedPerfil.setApellido(edittedPerfil.getApellido());
-        savedPerfil.setFechaNac(edittedPerfil.getFechaNac());
-        savedPerfil.setProfesion(edittedPerfil.getProfesion());
-        savedPerfil.setPerfilUrl(edittedPerfil.getPerfilUrl());
-        savedPerfil.setBannerUrl(edittedPerfil.getBannerUrl());
-        Provincia prov = this.provServ.provPorNombre(edittedPerfil.getProvincia());
-            if(prov == null){
-               /*
-                Si no existe la provincia que ingresamos, la creamos.
-                */
-               prov = new Provincia();
-               prov.setNombre(edittedPerfil.getProvincia());              
-               this.provServ.saveProvincia(prov);
-               Localidad locNueva = new Localidad();
-              
-               locNueva.setNombre(edittedPerfil.getLocalidad());
-               locNueva.setProvincia(prov);
-               this.locServ.saveLocalidad(locNueva);
-               savedPerfil.setLocalidad(locNueva);
-            }
-           else{             
-               /*
-                Si existe la provincia, hay que buscar la localidad para esa provincia.
-                (Pueden existir localidades que tengan los mismos nombres en 2 provincias distintas. EJ: Pilar en Santa Fe y Buenos Aires)
-                */
-               Localidad localidad =this.locServ.getLocByNombreAndProv(edittedPerfil.getLocalidad(), prov.getId());
-             
-               
-               if(localidad == null){
-                   /*
-                   Si no existe, la creamos y la guardamos
-                   */
-                   Localidad locNueva = new Localidad();
-                   
-                   locNueva.setNombre(edittedPerfil.getLocalidad());
-                   locNueva.setProvincia(prov);
-                   this.locServ.saveLocalidad(locNueva);
-                   savedPerfil.setLocalidad(locNueva);
-               }
-               else{
-                   /*
-                   SI existe, la retornamos y no guardamos nada.
-                   Se puede tomar como un metodo de busqueda de localidades secundario, en caso que no sepas el Cod Postal
-                   */
-                  savedPerfil.setLocalidad(localidad);
-                }
-           }
+        Perfil savedPerfil = dtoAPerfil(edittedPerfil);
+        savedPerfil.setUsuario_id(id_perfil);
+        
         this.perfilServ.savePerfil(savedPerfil);
         PerfilDto returnPerf = PasaADto.perfil(savedPerfil);
         int edad = Fecha.calculaEdad(edittedPerfil.getFechaNac());
@@ -162,7 +117,7 @@ public class PerfilController {
     
     
     
-    
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id_perfil}/editaRedPerfil")
     public RedPerfilDto editRedSociales(@PathVariable Long id_perfil, @RequestBody RedPerfilDto redDto){
         
@@ -187,6 +142,7 @@ public class PerfilController {
         return PasaADto.redPerfil(perfil_red);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{idPerfil}/agregaRedPerfil")
     public RedPerfilDto createRedSocial(@PathVariable Long idPerfil, @RequestBody RedPerfilDto redPerfil){
         /*
@@ -221,6 +177,8 @@ public class PerfilController {
         
         return PasaADto.redPerfil(perfil_red);        
     }
+    
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{idPerfil}/borraRedPerfil/{idRed}")
     public void deleteRedSocial(@PathVariable Long idPerfil, @PathVariable Long idRed){
         System.out.println(idPerfil + " "+idRed);
@@ -231,6 +189,7 @@ public class PerfilController {
         this.perfilServ.deletePerfilRed(idRedPerf);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{idPerfil}/editaAbout")
     public void editAbout(@PathVariable Long idPerfil,@RequestBody AboutDto ab){
         Perfil perf = this.perfilServ.getPerfilById(idPerfil);
@@ -238,4 +197,60 @@ public class PerfilController {
         this.perfilServ.savePerfil(perf);
     }
     
+    
+    /*
+    Funciones que usan los endpoints
+    */
+    private Perfil dtoAPerfil(PerfilDto perfDto){
+        Perfil perf = new Perfil();
+        perf.setNombre(perfDto.getNombre());
+        perf.setApellido(perfDto.getApellido());
+        perf.setFechaNac(perfDto.getFechaNac());
+        perf.setProfesion(perfDto.getProfesion());
+        perf.setPerfilUrl(perfDto.getPerfilUrl());
+        perf.setBannerUrl(perfDto.getBannerUrl());
+        Provincia prov = this.locServ.provPorNombre(perfDto.getProvincia());
+            if(prov == null){
+               /*
+                Si no existe la provincia que ingresamos, la creamos.
+                */
+               prov = new Provincia();
+               prov.setNombre(perfDto.getProvincia());              
+               this.locServ.saveProvincia(prov);
+               Localidad locNueva = new Localidad();
+              
+               locNueva.setNombre(perfDto.getLocalidad());
+               locNueva.setProvincia(prov);
+               this.locServ.saveLocalidad(locNueva);
+               perf.setLocalidad(locNueva);
+            }
+           else{             
+               /*
+                Si existe la provincia, hay que buscar la localidad para esa provincia.
+                (Pueden existir localidades que tengan los mismos nombres en 2 provincias distintas. EJ: Pilar en Santa Fe y Buenos Aires)
+                */
+               Localidad localidad =this.locServ.getLocByNombreAndProv(perfDto.getLocalidad(), prov.getId());
+             
+               
+               if(localidad == null){
+                   /*
+                   Si no existe, la creamos y la guardamos
+                   */
+                   Localidad locNueva = new Localidad();
+                   
+                   locNueva.setNombre(perfDto.getLocalidad());
+                   locNueva.setProvincia(prov);
+                   this.locServ.saveLocalidad(locNueva);
+                   perf.setLocalidad(locNueva);
+               }
+               else{
+                   /*
+                   SI existe, la retornamos y no guardamos nada.
+                   Se puede tomar como un metodo de busqueda de localidades secundario, en caso que no sepas el Cod Postal
+                   */
+                  perf.setLocalidad(localidad);
+                }
+           }
+            return perf;
+    }
 }

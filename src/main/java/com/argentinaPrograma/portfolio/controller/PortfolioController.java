@@ -5,28 +5,19 @@
  */
 package com.argentinaPrograma.portfolio.controller;
 
-import com.argentinaPrograma.portfolio.dto.EducacionByTipoDto;
 import com.argentinaPrograma.portfolio.dto.EducacionDto;
 import com.argentinaPrograma.portfolio.dto.ExperienciaDto;
 import com.argentinaPrograma.portfolio.dto.PortfolioDto;
 import com.argentinaPrograma.portfolio.dto.ProyectoDto;
 import com.argentinaPrograma.portfolio.dto.SkillDto;
-import com.argentinaPrograma.portfolio.dto.SkillsByTipoDto;
 import com.argentinaPrograma.portfolio.model.Educacion;
 import com.argentinaPrograma.portfolio.model.Experiencia;
 import com.argentinaPrograma.portfolio.model.Perfil;
 import com.argentinaPrograma.portfolio.model.Proyecto;
 import com.argentinaPrograma.portfolio.model.Skill;
-import com.argentinaPrograma.portfolio.model.TipoEducacion;
-import com.argentinaPrograma.portfolio.model.TipoSkill;
-
-import com.argentinaPrograma.portfolio.service.IEducacionService;
 import com.argentinaPrograma.portfolio.service.IPerfilService;
-import com.argentinaPrograma.portfolio.service.ITipoEducacionService;
-import com.argentinaPrograma.portfolio.service.ITipoSkillService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
 import static com.argentinaPrograma.portfolio.service.PasaADto.experiencia;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,16 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PortfolioController {
     @Autowired
     private IPerfilService perfilServ;
-    
-    @Autowired
-    private ITipoEducacionService tipoEduServ;
-    
-    @Autowired 
-    private IEducacionService eduServ;
-    
-    @Autowired
-    private ITipoSkillService tipoSkillServ;
-    
+
     @GetMapping("/traer/{id_perfil}")
     @ResponseBody
     public PortfolioDto getPortfolio(@PathVariable Long id_perfil){

@@ -38,7 +38,7 @@ public class Skill implements Serializable{
     private int porcentaje;
     
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @PrimaryKeyJoinColumn(name="perfil_id",referencedColumnName="id")
+    @PrimaryKeyJoinColumn(name="perfil_id",referencedColumnName="usuario_id")
     private Perfil perfil;
     
     @ManyToOne(cascade = {CascadeType.MERGE})

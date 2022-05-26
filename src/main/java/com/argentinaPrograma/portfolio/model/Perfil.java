@@ -4,6 +4,7 @@
  */
 package com.argentinaPrograma.portfolio.model;
 
+import com.argentinaPrograma.portfolio.security.entity.Usuario;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -14,12 +15,13 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -34,10 +36,15 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Setter @Getter
 @Table(name="perfil")
 public class Perfil implements Serializable {
+    
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
+    @Column(name="usuario_id")
+    private Long usuario_id;
+    
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.MERGE)
+    @PrimaryKeyJoinColumn(name="usuario_id")
+    private Usuario usuario;
     
     @Column(name="nombre")
     private String nombre;
@@ -53,21 +60,15 @@ public class Perfil implements Serializable {
     
     @Column(name="profesion")
     private String profesion;
-    
-    @Column(name="email")
-    private String email;
-    
-    @Column(name="contrasenia")
-    private String contrasenia;
-    
+   
     @Column(name="about")
     private String about;
 
-    @Column(name="perfil_url")
+    @Column(name="url_perfil")
     private String perfilUrl;
     
 
-    @Column(name="banner_url")
+    @Column(name="url_banner")
     private String bannerUrl;
     
     
@@ -97,7 +98,7 @@ public class Perfil implements Serializable {
     
     @Override
     public String toString(){
-        return "nombre: "+this.nombre+" apellido: "+this.apellido + " fecha nacimiento: "+this.fechaNac+" localidad: ";
+        return "nombre: "+this.nombre+" apellido: "+this.apellido + " fecha nacimiento: "+this.fechaNac+" localidad: "+this.localidad;
     }
     
 }

@@ -12,10 +12,10 @@ import com.argentinaPrograma.portfolio.model.TipoJornada;
 import com.argentinaPrograma.portfolio.service.IExperienciaService;
 import com.argentinaPrograma.portfolio.service.IInstitucionService;
 import com.argentinaPrograma.portfolio.service.IPerfilService;
-import com.argentinaPrograma.portfolio.service.ITipoJornadaService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,9 +44,10 @@ public class ExperienciaController {
     @Autowired
     private IInstitucionService instiServ;
     
-    @Autowired
-    private ITipoJornadaService tipoJornServ;
-    
+   
+    /*
+    Endpoints propios de Experienca
+    */
     @GetMapping("/traer")
     @ResponseBody
     public List<Experiencia> getExperiencias(){
@@ -62,6 +63,7 @@ public class ExperienciaController {
     /*
     Obiene un dto, lo mapea a las entidades del modelo, y devuelve el dto denuevo
     */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/crear")
     public ExperienciaDto createExperiencia(@RequestBody ExperienciaDto expDto){       
         Experiencia savedExp = dtoAExperiencia(expDto);    
@@ -69,11 +71,13 @@ public class ExperienciaController {
         return PasaADto.experiencia(savedExp);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/borrar/{id}")
     public void deleteExperiencia(@PathVariable Long id){
         this.experienciaServ.deleteExperienciaById(id);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/editar")
     public ExperienciaDto editExperiencia( @RequestBody ExperienciaDto edittedExp){      
         Experiencia savedExp = dtoAExperiencia(edittedExp);
@@ -106,9 +110,24 @@ public class ExperienciaController {
         Perfil perf = this.perfServ.getPerfilById(expDto.getIdPerfil());
         exp.setPerfil(perf);       
         
-        TipoJornada tipoJorn = this.tipoJornServ.getTipoJornadaById(expDto.getTipoJornada().getId());
+        TipoJornada tipoJorn = this.experienciaServ.getTipoJornadaById(expDto.getTipoJornada().getId());
         exp.setTipoJornada(tipoJorn);
         return exp;
+    }
+    
+    /*
+    Endpoints de TipoJornada
+    */
+    @GetMapping("/tipoJornada/traer")
+    @ResponseBody
+    public List<TipoJornada> getTiposJornada(){
+       return this.experienciaServ.getTiposJornada();
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/tipoJornada/crear")
+    public void createTipoJornada(@RequestBody TipoJornada tipoJornadaNueva){
+        this.experienciaServ.saveTipoJornada(tipoJornadaNueva);
     }
     
 }

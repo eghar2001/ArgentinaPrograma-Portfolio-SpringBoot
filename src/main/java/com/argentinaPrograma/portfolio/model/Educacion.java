@@ -65,8 +65,13 @@ public class Educacion implements Serializable {
     private Institucion institucion;
     
     @ManyToOne(cascade={CascadeType.MERGE})
-    @PrimaryKeyJoinColumn(name="perfil_id",referencedColumnName="id")
+    @PrimaryKeyJoinColumn(name="usuario_id",referencedColumnName="id")
     private Perfil perfil;
+
+    @Override
+    public String toString() {
+        return "Educacion{" + "id=" + id + ", descripcion=" + descripcion + ", fechaDesde=" + fechaDesde + ", fechaHasta=" + fechaHasta + '}';
+    }
     
     
     
@@ -75,8 +80,5 @@ public class Educacion implements Serializable {
    
     
     
-    /*@Override
-    public String toString(){
-        return "id: "+this.getId()+" nombre: "+this.getDescripcion() + " tipoEstudio:'"+this.getTipoEstudio()+"'";
-    }*/
+    
 }

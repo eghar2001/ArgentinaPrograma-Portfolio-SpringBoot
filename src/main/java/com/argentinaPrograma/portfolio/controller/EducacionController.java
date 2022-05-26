@@ -24,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.argentinaPrograma.portfolio.service.IEducacionService;
 import com.argentinaPrograma.portfolio.service.IInstitucionService;
 import com.argentinaPrograma.portfolio.service.IPerfilService;
-import com.argentinaPrograma.portfolio.service.ITipoEducacionService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 /**
@@ -40,29 +40,31 @@ public  class EducacionController {
     private IEducacionService eduServ;
     
     @Autowired
-    private ITipoEducacionService tipoEduServ;
-    
-    @Autowired
     private IInstitucionService instiServ;
     
     @Autowired 
     private IPerfilService perfServ;
     
+    
+    /*
+    Endpoints propios de educacion
+    */
     @GetMapping("/traer")
     @ResponseBody
     public List<Educacion> getEducaciones(){
         return this.eduServ.getEducaciones();
     }
-    
+
     @GetMapping("/traer/{id}")
     @ResponseBody
     public Educacion getEducacionById(@PathVariable Long id){
         return this.eduServ.getEducacionById(id);
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/crear")
     public EducacionDto createEducacion(@RequestBody EducacionDto eduDto){
-        System.out.println(eduDto);      
+        
        
        Educacion savedEdu = new Educacion();
        savedEdu.setDescripcion(eduDto.getDescripcion());
@@ -75,12 +77,14 @@ public  class EducacionController {
        Perfil perf = this.perfServ.getPerfilById(eduDto.getIdPerfil());
        savedEdu.setPerfil(perf);
        
-       TipoEducacion tipoEdu = this.tipoEduServ.getTipoEstudioById(eduDto.getIdTipoEdu());
+       TipoEducacion tipoEdu = this.eduServ.getTipoEstudioById(eduDto.getIdTipoEdu());
        savedEdu.setTipoEducacion(tipoEdu);
        Institucion insti = buscaInsti(eduDto);
-            savedEdu.setInstitucion(insti);
+       savedEdu.setInstitucion(insti);
+       
        
        savedEdu = this.eduServ.saveEducacion(savedEdu);
+       
        
     return PasaADto.educacion(savedEdu);
 
@@ -89,12 +93,14 @@ public  class EducacionController {
         
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/borrar/{id}")
     public Long deleteEducacionById(@PathVariable Long id){      
       this.eduServ.deleteEducacionById(id);
       return id;
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/editar")
     public EducacionDto editEducacion( @RequestBody EducacionDto edittedEdu){
         Educacion savedEdu = this.eduServ.getEducacionById(edittedEdu.getId());
@@ -113,6 +119,29 @@ public  class EducacionController {
        
     }
     
+    /*
+    Endpoints TipoEducacion
+    */
+    @GetMapping("/tipo/traer")
+    @ResponseBody
+    public List<TipoEducacion> getTipoEstudios(){
+        return this.eduServ.getTipoEstudios();
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/tipo/crear")
+    public void createTipoEstudio(@RequestBody TipoEducacion tipoEst){
+        this.eduServ.saveTipoEstudio(tipoEst);
+    }
+    
+    
+    /*
+    Funciones usadas por alguno de los endpoints
+    */
+    
+    
+    
+    
     private Institucion buscaInsti(EducacionDto eduDto){
         Institucion insti = this.instiServ.getInstitucionByNombre(eduDto.getNombreInstitucion());
             if(insti == null){
@@ -124,11 +153,11 @@ public  class EducacionController {
                 insti.setLogoUrl(eduDto.getFotoInstitucionUrl());
                 insti = this.instiServ.saveInstitucion(insti);
             } 
-        return insti;
-            
-            
+        return insti;  
     }
-   
-  
-    
-    }
+
+
+
+
+
+}

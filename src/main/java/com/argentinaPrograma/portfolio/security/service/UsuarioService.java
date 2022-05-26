@@ -1,0 +1,40 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.argentinaPrograma.portfolio.security.service;
+
+import com.argentinaPrograma.portfolio.security.entity.Usuario;
+import com.argentinaPrograma.portfolio.security.repository.UsuarioRepository;
+
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ *
+ * @author nahux
+ */
+@Service
+@Transactional
+public class UsuarioService {
+    @Autowired
+    private UsuarioRepository usuarioRepo;
+    
+    public Optional<Usuario> getByNombreUsuario(String nombreUsuario){
+        return this.usuarioRepo.findByNombreUsuario(nombreUsuario);
+    }
+    
+    public boolean existsByNombreUsuario(String nombreUsuario){
+        return this.usuarioRepo.existsByNombreUsuario(nombreUsuario);
+    } 
+    
+    public boolean existsByEmail(String email){
+        return this.usuarioRepo.existsByEmail(email);
+    }
+    
+    public void save(Usuario usuario){
+        this.usuarioRepo.save(usuario);
+    }
+}

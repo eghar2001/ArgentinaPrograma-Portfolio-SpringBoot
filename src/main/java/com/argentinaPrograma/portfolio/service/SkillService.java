@@ -5,7 +5,9 @@
 package com.argentinaPrograma.portfolio.service;
 
 import com.argentinaPrograma.portfolio.model.Skill;
+import com.argentinaPrograma.portfolio.model.TipoSkill;
 import com.argentinaPrograma.portfolio.repository.SkillRepository;
+import com.argentinaPrograma.portfolio.repository.TipoSkillRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,13 @@ import org.springframework.stereotype.Service;
 public class SkillService  implements ISkillService{
     @Autowired
     private SkillRepository skillRepo;
+    
+    @Autowired
+    private TipoSkillRepository tipoSkillRepo;
+    
+    /*
+    Los de Skill
+    */
     
     @Override
     public List<Skill> getSkills(){
@@ -39,5 +48,23 @@ public class SkillService  implements ISkillService{
         this.skillRepo.deleteById(id);
     }
     
+    /*
+    Los de TipoSkill
+    */
+    @Override
+    public List<TipoSkill> getTiposSkill(){
+        return this.tipoSkillRepo.findAll();
+    }
     
+    @Override
+    public TipoSkill getTipoSkillById(Long id){
+        return this.tipoSkillRepo.findById(id).orElse(null);
+    }
+    
+    @Override
+    public void saveTipoSkill(TipoSkill tipoSkill){
+        this.tipoSkillRepo.save(tipoSkill);
+                
+    }
+
 }
