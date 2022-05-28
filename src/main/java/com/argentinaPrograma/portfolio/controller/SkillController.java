@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/skill")
-@CrossOrigin(origins = "https://miportfolioanguar.web.app/")
+@CrossOrigin(origins = "https://miportfolioanguar.web.app")
 public class SkillController {
     @Autowired
     private ISkillService skillServ;
