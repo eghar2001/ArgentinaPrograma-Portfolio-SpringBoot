@@ -17,7 +17,7 @@ import lombok.Setter;
 @Embeddable
 @Getter @Setter
 public class Perfil_has_RedSocial_ID implements Serializable{
-    @Column(name="id_perfil")
+    @Column(name="id_perfil_usuario")
     private Long idPerfil;
     
     @Column(name="id_red_social")

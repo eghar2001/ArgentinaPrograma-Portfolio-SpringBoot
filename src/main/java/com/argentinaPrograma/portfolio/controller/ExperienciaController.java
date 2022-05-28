@@ -106,9 +106,9 @@ public class ExperienciaController {
             instiServ.saveInstitucion(insti);
         }
         exp.setInstitucion(insti);
-        
         Perfil perf = this.perfServ.getPerfilById(expDto.getIdPerfil());
-        exp.setPerfil(perf);       
+        exp.setPerfil(perf); 
+              
         
         TipoJornada tipoJorn = this.experienciaServ.getTipoJornadaById(expDto.getTipoJornada().getId());
         exp.setTipoJornada(tipoJorn);

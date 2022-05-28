@@ -27,8 +27,8 @@ public class Perfil_has_RedSocial implements Serializable {
     private Perfil_has_RedSocial_ID id;
     
     @ManyToOne
-    @MapsId("id_perfil")
-    @JoinColumn(name = "id_perfil")
+    @MapsId("id_perfil_usuario")
+    @JoinColumn(name = "id_perfil_usuario")
     Perfil perfil;
     
     @ManyToOne

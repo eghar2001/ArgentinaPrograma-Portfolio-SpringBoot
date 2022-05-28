@@ -110,12 +110,12 @@ public  class EducacionController {
         /*
         Chequeamos que el nombre no sea el mismo nombre, para ahorrarnos consultas a la BBDD
         */
-        if(!savedEdu.getInstitucion().getNombre().equalsIgnoreCase(edittedEdu.getNombreInstitucion())){
-            Institucion insti = buscaInsti(edittedEdu);       
-            savedEdu.setInstitucion(insti);
-        }
-       savedEdu = this.eduServ.saveEducacion(savedEdu);
-       return PasaADto.educacion(savedEdu);
+        
+        Institucion insti = buscaInsti(edittedEdu);       
+        savedEdu.setInstitucion(insti);
+
+        savedEdu = this.eduServ.saveEducacion(savedEdu);
+        return PasaADto.educacion(savedEdu);
        
     }
     
@@ -149,10 +149,11 @@ public  class EducacionController {
                 insti.setNombre(eduDto.getNombreInstitucion());
                 insti.setLogoUrl(eduDto.getFotoInstitucionUrl());
                 insti = this.instiServ.saveInstitucion(insti);
-            }else if (insti.getLogoUrl() == null){
+            }else if (insti.getLogoUrl() == null) {
                 insti.setLogoUrl(eduDto.getFotoInstitucionUrl());
                 insti = this.instiServ.saveInstitucion(insti);
             } 
+        System.out.println(insti);
         return insti;  
     }
 

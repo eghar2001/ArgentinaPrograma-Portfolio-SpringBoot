@@ -43,7 +43,7 @@ public class PasaADto {
     }
     public static PerfilDto perfil(Perfil perf){
         PerfilDto perfDto = new PerfilDto();
-        perfDto.setId(perf.getUsuario().getId());
+        perfDto.setId(perf.getUsuario_id());
         perfDto.setNombre(perf.getNombre());
         perfDto.setApellido(perf.getApellido());
         perfDto.setLocalidad(perf.getLocalidad().getNombre());
@@ -60,16 +60,19 @@ public class PasaADto {
         /*
         Agrego Redes Sociales
         */
-        List<RedPerfilDto> redesSociales = new ArrayList<>();
-        for(Perfil_has_RedSocial red:perf.getRedesSociales()){
-            redesSociales.add(redPerfil(red));
+        if(perf.getRedesSociales()!=null){
+            List<RedPerfilDto> redesSociales = new ArrayList<>();
+            for(Perfil_has_RedSocial red:perf.getRedesSociales()){
+                redesSociales.add(redPerfil(red));
+            }
+            perfDto.setRedesSociales(redesSociales);
         }
-        perfDto.setRedesSociales(redesSociales);
         return perfDto;
     }
     public static EducacionDto educacion(Educacion edu){
         EducacionDto eduDto = new EducacionDto();
         eduDto.setId(edu.getId());
+        eduDto.setIdPerfil(edu.getPerfil().getUsuario_id());
         eduDto.setFechaDesde(edu.getFechaDesde());
         eduDto.setFechaHasta(edu.getFechaHasta());
         eduDto.setDescripcion(edu.getDescripcion());          

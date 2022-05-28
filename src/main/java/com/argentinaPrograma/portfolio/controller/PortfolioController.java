@@ -39,14 +39,14 @@ public class PortfolioController {
     @Autowired
     private IPerfilService perfilServ;
 
-    @GetMapping("/traer/{id_perfil}")
+    @GetMapping("/traer/{id_usuario}")
     @ResponseBody
-    public PortfolioDto getPortfolio(@PathVariable Long id_perfil){
+    public PortfolioDto getPortfolio(@PathVariable Long id_usuario){
         
         PortfolioDto portfolio = new PortfolioDto();
         //Asigno Perfil
-        Perfil perfil = this.perfilServ.getPerfilById(id_perfil);
-        portfolio.setPerfil(PasaADto.perfil(perfil));   
+        Perfil perfil = this.perfilServ.getPerfilById(id_usuario);
+        portfolio.setPerfil(PasaADto.perfil(perfil)); 
         
         /*
         Asigno listado de educaciones by tipo

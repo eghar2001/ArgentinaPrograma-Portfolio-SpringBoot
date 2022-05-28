@@ -18,8 +18,6 @@ Se utiliza para dar de alta un usuario
 */
 public class NuevoUsuario {
     
-    @NotBlank
-    private String nombre;
     
     @NotBlank
     private String nombreUsuario;
@@ -32,14 +30,7 @@ public class NuevoUsuario {
     
     private Set<String> roles = new HashSet<>();
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
+  
     public String getNombreUsuario() {
         return nombreUsuario;
     }

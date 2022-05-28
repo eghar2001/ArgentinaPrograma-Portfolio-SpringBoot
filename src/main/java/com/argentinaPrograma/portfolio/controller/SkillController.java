@@ -90,8 +90,7 @@ public class SkillController {
     /*
     Endpoints de TipoSkill
     */
-    
-    @PreAuthorize("hasRole('ADMIN')")
+
     @GetMapping("/tipo/traer")
     @ResponseBody
     public List<TipoSkill> getTiposSkill(){

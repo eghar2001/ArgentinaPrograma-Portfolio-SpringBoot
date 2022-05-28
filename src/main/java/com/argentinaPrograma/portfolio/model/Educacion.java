@@ -65,7 +65,7 @@ public class Educacion implements Serializable {
     private Institucion institucion;
     
     @ManyToOne(cascade={CascadeType.MERGE})
-    @PrimaryKeyJoinColumn(name="usuario_id",referencedColumnName="id")
+    @PrimaryKeyJoinColumn(name="perfil_id",referencedColumnName="usuario_id")
     private Perfil perfil;
 
     @Override

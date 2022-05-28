@@ -59,6 +59,7 @@ public class ProyectoController {
         */
         Perfil perf = this.perfServ.getPerfilById(proyDto.getIdPerfil());
         savedProy.setPerfil(perf);
+        System.out.println(savedProy.getPerfil().getUsuario_id());
         
         savedProy = this.proyServ.saveProyecto(savedProy);
         

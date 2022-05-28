@@ -103,12 +103,12 @@ public class PerfilController {
     }
     
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/editar/{id_perfil}")
-    public PerfilDto editPerfil(@PathVariable Long id_perfil,@RequestBody PerfilDto edittedPerfil){
+    @PutMapping("/editar/{id_usuario}")
+    public PerfilDto editPerfil(@PathVariable Long id_usuario,@RequestBody PerfilDto edittedPerfil){
         Perfil savedPerfil = dtoAPerfil(edittedPerfil);
-        savedPerfil.setUsuario_id(id_perfil);
+        savedPerfil.setUsuario_id(id_usuario);
         
-        this.perfilServ.savePerfil(savedPerfil);
+        savedPerfil = this.perfilServ.savePerfil(savedPerfil);
         PerfilDto returnPerf = PasaADto.perfil(savedPerfil);
         int edad = Fecha.calculaEdad(edittedPerfil.getFechaNac());
         returnPerf.setEdad(edad);
