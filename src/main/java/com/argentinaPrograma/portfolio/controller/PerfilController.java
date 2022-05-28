@@ -181,7 +181,6 @@ public class PerfilController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{idPerfil}/borraRedPerfil/{idRed}")
     public void deleteRedSocial(@PathVariable Long idPerfil, @PathVariable Long idRed){
-        System.out.println(idPerfil + " "+idRed);
         Perfil_has_RedSocial_ID idRedPerf = new Perfil_has_RedSocial_ID();
         
         idRedPerf.setIdPerfil(idPerfil);

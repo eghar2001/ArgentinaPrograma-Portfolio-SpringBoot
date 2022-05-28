@@ -17,7 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PerfilHasRedSocialRepository extends JpaRepository<Perfil_has_RedSocial,Long> {
    @Modifying
-   @Query( value = "DELETE FROM perfil_has_redsocial p WHERE p.id_perfil = ?1 AND p.id_red_social = ?2",nativeQuery = true)
+   @Query( value = "DELETE FROM perfil_has_redsocial p WHERE p.id_perfil_usuario = ?1 AND p.id_red_social = ?2",nativeQuery = true)
    public void deleteRedPerfil(Long idPerf, Long idRed);
    
 }
