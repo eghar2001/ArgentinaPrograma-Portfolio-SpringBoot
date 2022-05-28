@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author nahux
  */
 @RestController
-@CrossOrigin(origins = "https://miportfolioanguar.web.app")
+@CrossOrigin(origins = "https://miportfolioanguar.web.app/")
 @RequestMapping("/portfolio")
 public class PortfolioController {
     @Autowired

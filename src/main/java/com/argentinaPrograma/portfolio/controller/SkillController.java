@@ -4,14 +4,14 @@
  */
 package com.argentinaPrograma.portfolio.controller;
 
-import com.argentinaPrograma.portfolio.model.Skill;
-import com.argentinaPrograma.portfolio.service.ISkillService;
-import java.util.List;
 import com.argentinaPrograma.portfolio.dto.SkillDto;
 import com.argentinaPrograma.portfolio.model.Perfil;
+import com.argentinaPrograma.portfolio.model.Skill;
 import com.argentinaPrograma.portfolio.model.TipoSkill;
 import com.argentinaPrograma.portfolio.service.IPerfilService;
+import com.argentinaPrograma.portfolio.service.ISkillService;
 import com.argentinaPrograma.portfolio.service.PasaADto;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,9 +29,10 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author nahux
  */
+
 @RestController
-@CrossOrigin(origins = "https://miportfolioanguar.web.app")
 @RequestMapping("/skill")
+@CrossOrigin(origins = "https://miportfolioanguar.web.app/")
 public class SkillController {
     @Autowired
     private ISkillService skillServ;
@@ -90,7 +91,6 @@ public class SkillController {
     /*
     Endpoints de TipoSkill
     */
-
     @GetMapping("/tipo/traer")
     @ResponseBody
     public List<TipoSkill> getTiposSkill(){
