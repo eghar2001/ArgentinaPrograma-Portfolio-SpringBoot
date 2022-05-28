@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author nahux
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://miportfolioanguar.web.app")
 @RequestMapping("/fecha")
 public class FechaController {
     @GetMapping("/actual")
