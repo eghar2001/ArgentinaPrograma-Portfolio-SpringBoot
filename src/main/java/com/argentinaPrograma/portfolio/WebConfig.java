@@ -20,7 +20,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-            .allowedOrigins("http://domain2.com")
+            .allowedOrigins("https://miportfolioanguar.web.app")
             .allowedMethods("PUT", "DELETE", "POST","GET");
     }
 }
