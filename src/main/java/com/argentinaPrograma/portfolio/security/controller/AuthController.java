@@ -23,6 +23,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,6 +33,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +77,7 @@ public class AuthController {
         Validaciones que tambien estan en el form del front
         */
         //MAXIMOS
-        /*if(nuevoUsuario.getNombreUsuario().length()>valid.getMaxLengthUser()){
+        if(nuevoUsuario.getNombreUsuario().length()>valid.getMaxLengthUser()){
             return new ResponseEntity(new Mensaje("Username se excede en longitud"),HttpStatus.BAD_REQUEST);
         }
         if(nuevoUsuario.getEmail().length()>valid.getMaxLengthEmail()){
@@ -93,8 +95,7 @@ public class AuthController {
         }
         if(!passMatcher.find()){
             return new ResponseEntity(new Mensaje("Password no cumple con estandares requeridos"),HttpStatus.BAD_REQUEST);
-        }*/
-        
+        }
         if(usuarioServ.existsByNombreUsuario(nuevoUsuario.getNombreUsuario())){
             return new ResponseEntity(new Mensaje("Ese username ya existe"), HttpStatus.BAD_REQUEST);
         }
@@ -131,6 +132,21 @@ public class AuthController {
         UserDetails userDetails = (UserDetails)authentication.getPrincipal();
         JwtDto jwtDto = new JwtDto(jwt,userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity(jwtDto,HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/altaAdmin/{username}")
+    public ResponseEntity<Mensaje> altaAdmin(@PathVariable String username){
+        Usuario user = this.usuarioServ.getByNombreUsuario(username).get();
+        if(user == null){
+            return new ResponseEntity(new Mensaje("Usuario no encontrado"),HttpStatus.BAD_REQUEST);
+        }
+        user.getRoles().add(this.rolServ.getByRolNombre(RolNombre.ROLE_ADMIN).get());
+        
+        this.usuarioServ.save(user);
+        return new ResponseEntity(new Mensaje(username +" es admin"),HttpStatus.OK);
+        
+        
+        
     }
     
     @GetMapping("/validaciones")
