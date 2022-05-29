@@ -75,7 +75,7 @@ public class AuthController {
         Validaciones que tambien estan en el form del front
         */
         //MAXIMOS
-        if(nuevoUsuario.getNombreUsuario().length()>valid.getMaxLengthUser()){
+        /*if(nuevoUsuario.getNombreUsuario().length()>valid.getMaxLengthUser()){
             return new ResponseEntity(new Mensaje("Username se excede en longitud"),HttpStatus.BAD_REQUEST);
         }
         if(nuevoUsuario.getEmail().length()>valid.getMaxLengthEmail()){
@@ -93,7 +93,7 @@ public class AuthController {
         }
         if(!passMatcher.find()){
             return new ResponseEntity(new Mensaje("Password no cumple con estandares requeridos"),HttpStatus.BAD_REQUEST);
-        }
+        }*/
         
         if(usuarioServ.existsByNombreUsuario(nuevoUsuario.getNombreUsuario())){
             return new ResponseEntity(new Mensaje("Ese username ya existe"), HttpStatus.BAD_REQUEST);
