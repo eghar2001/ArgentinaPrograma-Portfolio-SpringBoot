@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface RedSocialRepository extends JpaRepository<RedSocial,Long>{
-   @Query( value = "SELECT * FROM redSocial r WHERE r.id NOT IN (SELECT id_red_social FROM perfil_has_redsocial p WHERE p.id_perfil_usuario = ?1);",nativeQuery = true)
+   @Query( value = "SELECT * FROM redsocial r WHERE r.id NOT IN (SELECT id_red_social FROM perfil_has_redsocial p WHERE p.id_perfil_usuario = ?1);",nativeQuery = true)
    public List<RedSocial> getRedesFaltantes(Long idPerf);
    
 }
