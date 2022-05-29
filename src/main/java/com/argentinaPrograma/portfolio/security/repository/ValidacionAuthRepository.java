@@ -4,9 +4,7 @@
  */
 package com.argentinaPrograma.portfolio.security.repository;
 
-import com.argentinaPrograma.portfolio.security.entity.Usuario;
-
-import java.util.Optional;
+import com.argentinaPrograma.portfolio.security.entity.ValidacionAuth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,12 +13,6 @@ import org.springframework.stereotype.Repository;
  * @author nahux
  */
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario,Long>{
-    Optional<Usuario> findByNombreUsuario(String nombreUsuario);
+public interface ValidacionAuthRepository extends JpaRepository<ValidacionAuth,Integer> {
     
-    void deleteByNombreUsuario(String nombreUsuario);
-    
-    boolean existsByNombreUsuario(String nombreUsuario);
-    
-    boolean existsByEmail(String email);
 }

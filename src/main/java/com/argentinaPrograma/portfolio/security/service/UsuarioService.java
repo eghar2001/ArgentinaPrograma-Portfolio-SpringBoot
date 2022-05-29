@@ -6,9 +6,11 @@ package com.argentinaPrograma.portfolio.security.service;
 
 import com.argentinaPrograma.portfolio.security.entity.Usuario;
 import com.argentinaPrograma.portfolio.security.repository.UsuarioRepository;
+import java.util.List;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +31,8 @@ public class UsuarioService {
         return this.usuarioRepo.findById(id).orElse(null);
     }
     
+    
+    
     public boolean existsByNombreUsuario(String nombreUsuario){
         return this.usuarioRepo.existsByNombreUsuario(nombreUsuario);
     } 
@@ -39,5 +43,15 @@ public class UsuarioService {
     
     public void save(Usuario usuario){
         this.usuarioRepo.save(usuario);
+    }
+    /*
+    Utilizados para el mantenimento de usuarios
+    */
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Usuario> getUsuarios(){
+        return this.usuarioRepo.findAll();
+    }
+    public void deleteUsuarioByUsername(String username){
+       this.usuarioRepo.deleteByNombreUsuario(username);
     }
 }

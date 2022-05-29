@@ -8,15 +8,17 @@ import com.argentinaPrograma.portfolio.dto.Mensaje;
 import com.argentinaPrograma.portfolio.security.dto.JwtDto;
 import com.argentinaPrograma.portfolio.security.dto.LoginUsuario;
 import com.argentinaPrograma.portfolio.security.dto.NuevoUsuario;
-import com.argentinaPrograma.portfolio.security.dto.ValidacionesAuth;
 import com.argentinaPrograma.portfolio.security.entity.Rol;
 import com.argentinaPrograma.portfolio.security.entity.Usuario;
+import com.argentinaPrograma.portfolio.security.entity.ValidacionAuth;
 import com.argentinaPrograma.portfolio.security.enums.RolNombre;
 import com.argentinaPrograma.portfolio.security.jwt.JwtProvider;
 import com.argentinaPrograma.portfolio.security.service.RolService;
 import com.argentinaPrograma.portfolio.security.service.UsuarioService;
+import com.argentinaPrograma.portfolio.security.service.ValidacionAuthServ;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import javax.validation.Valid;
@@ -32,9 +34,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,9 +68,12 @@ public class AuthController {
     @Autowired
     private JwtProvider jwtProvider;
     
+    @Autowired
+    private ValidacionAuthServ validsServ;
+    
     @PostMapping("/nuevo")
     public ResponseEntity<?> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
-        ValidacionesAuth valid = new ValidacionesAuth();
+        ValidacionAuth valid = this.validsServ.getValidacion();
         Matcher userMatcher = valid.getRegexUser().matcher(nuevoUsuario.getNombreUsuario());
         Matcher emailMatcher = valid.getRegexEmail().matcher(nuevoUsuario.getEmail());
         Matcher passMatcher = valid.getRegexPass().matcher(nuevoUsuario.getPassword());
@@ -133,6 +140,10 @@ public class AuthController {
         JwtDto jwtDto = new JwtDto(jwt,userDetails.getUsername(), userDetails.getAuthorities());
         return new ResponseEntity(jwtDto,HttpStatus.OK);
     }
+    
+    /*
+    Funciones para el manejo del admin
+    */
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/altaAdmin/{username}")
     public ResponseEntity<Mensaje> altaAdmin(@PathVariable String username){
@@ -143,16 +154,70 @@ public class AuthController {
         user.getRoles().add(this.rolServ.getByRolNombre(RolNombre.ROLE_ADMIN).get());
         
         this.usuarioServ.save(user);
-        return new ResponseEntity(new Mensaje(username +" es admin"),HttpStatus.OK);
-        
-        
-        
+        return new ResponseEntity(new Mensaje(username +" es admin"),HttpStatus.OK);    
     }
     
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/usuario/traer")
+    public List<Usuario> getUsuarios(){
+        return this.usuarioServ.getUsuarios();
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/usuario/borrar/{username}")
+    public void deleteUsuario(@PathVariable String username){
+        this.usuarioServ.deleteUsuarioByUsername(username);
+    }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/usuario/edit/{usernameActual}")
+    public ResponseEntity<Mensaje> edit(@PathVariable String usernameActual , @RequestBody Usuario edittedUser){
+        Usuario user = this.usuarioServ.getByNombreUsuario(usernameActual).get();
+        if(user == null){
+            return new ResponseEntity(new Mensaje(usernameActual+" no fue encontrado!"), HttpStatus.BAD_REQUEST);
+        }
+        edittedUser.setId(user.getId());
+        edittedUser.setPassword(this.passwordEncoder.encode(edittedUser.getPassword()));
+        if (usernameActual.equals(edittedUser.getNombreUsuario()) ){
+            if(user.getEmail().equals(edittedUser.getEmail())){                
+                this.usuarioServ.save(edittedUser);
+                return new ResponseEntity(new Mensaje(usernameActual+" fue editado!"), HttpStatus.OK);
+            }
+            else if(this.usuarioServ.existsByEmail(edittedUser.getEmail())){
+                return new ResponseEntity(new Mensaje(edittedUser.getEmail()+" ya existe!"), HttpStatus.BAD_REQUEST);
+            } 
+            else{
+                this.usuarioServ.save(edittedUser);
+                return new ResponseEntity(new Mensaje(usernameActual+" fue editado!"), HttpStatus.OK);
+            }
+        }else if(this.usuarioServ.existsByNombreUsuario(usernameActual)){
+            return new ResponseEntity(new Mensaje(edittedUser.getNombreUsuario()+" ya existe!"), HttpStatus.BAD_REQUEST);
+        }
+        else{
+            this.usuarioServ.save(edittedUser);
+            return new ResponseEntity(new Mensaje(usernameActual+" fue editado!"), HttpStatus.OK);
+        }
+        
+        
+    }
+    /*
+    Edicion de validaciones
+    */
     @GetMapping("/validaciones")
     @ResponseBody
-    public ValidacionesAuth getValidaciones(){
-        return new ValidacionesAuth();
+    public ValidacionAuth getValidaciones(){
+        return this.validsServ.getValidacion();
     }
+    
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/validaciones/edit")
+    public ValidacionAuth editValidaciones(@RequestBody ValidacionAuth valids){
+        valids.setId(1);
+        return this.validsServ.saveValidacion(valids);
+    }
+    
+    
+    
+    
     
 }
