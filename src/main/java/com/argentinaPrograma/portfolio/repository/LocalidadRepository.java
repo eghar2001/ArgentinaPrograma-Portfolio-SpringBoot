@@ -20,6 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Repository
 public interface LocalidadRepository extends JpaRepository<Localidad,Long> {
-   @Query( value = "SELECT * FROM LOCALIDAD l WHERE UPPER(l.nombre) = UPPER(?1) AND l.id_provincia = ?2",nativeQuery = true)
+   @Query( value = "SELECT * FROM localidad l WHERE UPPER(l.nombre) = UPPER(?1) AND l.id_provincia = ?2",nativeQuery = true)
    public Optional<Localidad> getLocByNombreAndProv(String localidad, Long id_provincia);
 }

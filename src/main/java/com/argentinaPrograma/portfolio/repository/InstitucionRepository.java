@@ -16,6 +16,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface InstitucionRepository extends JpaRepository<Institucion,Long>{
-       @Query( value = "SELECT * FROM INSTITUCION i WHERE UPPER(i.nombre) = UPPER(?1)",nativeQuery = true)
+       @Query( value = "SELECT * FROM institucion i WHERE UPPER(i.nombre) = UPPER(?1)",nativeQuery = true)
        public Optional<Institucion> getInstitucionByNombre(String nombre);
 }

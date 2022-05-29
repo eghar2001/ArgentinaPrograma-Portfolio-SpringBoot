@@ -21,6 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Repository
 public interface ProvinciaRepository extends JpaRepository<Provincia,Long>{
-   @Query( value = "SELECT * FROM PROVINCIA p WHERE UPPER (p.nombre) = UPPER(?1)",nativeQuery = true)
+   @Query( value = "SELECT * FROM provincia p WHERE UPPER (p.nombre) = UPPER(?1)",nativeQuery = true)
    public Optional<Provincia> getProvByNombre(String provincia );
 }

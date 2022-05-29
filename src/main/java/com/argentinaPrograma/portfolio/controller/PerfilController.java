@@ -249,7 +249,7 @@ public class PerfilController {
                    */
                   perf.setLocalidad(localidad);
                 }
-           }
+           }            
             return perf;
     }
 }
