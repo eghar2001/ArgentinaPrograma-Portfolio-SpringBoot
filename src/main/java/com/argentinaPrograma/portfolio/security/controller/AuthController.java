@@ -72,42 +72,42 @@ public class AuthController {
     private ValidacionAuthServ validsServ;
     
     @PostMapping("/nuevo")
-    public ResponseEntity<String> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
+    public ResponseEntity<Mensaje> nuevo(@Valid @RequestBody NuevoUsuario nuevoUsuario, BindingResult bindingResult){
         ValidacionAuth valid = this.validsServ.getValidacion();
         Matcher userMatcher = valid.getRegexUser().matcher(nuevoUsuario.getNombreUsuario());
         Matcher emailMatcher = valid.getRegexEmail().matcher(nuevoUsuario.getEmail());
         Matcher passMatcher = valid.getRegexPass().matcher(nuevoUsuario.getPassword());
         if(bindingResult.hasErrors()){
-            return new ResponseEntity( "Campos mal puestos o email invalido",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje( "Campos mal puestos o email invalido"),HttpStatus.BAD_REQUEST);
         }
         /*
         Validaciones que tambien estan en el form del front
         */
         //MAXIMOS
         if(nuevoUsuario.getNombreUsuario().length()>valid.getMaxLengthUser()){
-            return new ResponseEntity("Username se excede en longitud",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Username se excede en longitud"),HttpStatus.BAD_REQUEST);
         }
         if(nuevoUsuario.getEmail().length()>valid.getMaxLengthEmail()){
-            return new ResponseEntity("Email se excede en longitud",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Email se excede en longitud"),HttpStatus.BAD_REQUEST);
         }
         if( nuevoUsuario.getPassword().length() > valid.getMaxLengthPass()){
-            return new ResponseEntity("Password se excede en longitud",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Password se excede en longitud"),HttpStatus.BAD_REQUEST);
         }
         //Patrones
         if(!userMatcher.find()){
-            return new ResponseEntity("User no cumple con estandares requeridos",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("User no cumple con estandares requeridos"),HttpStatus.BAD_REQUEST);
         }
         if(!emailMatcher.find()){
-            return new ResponseEntity("Email no cumple con estandares requeridos",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Email no cumple con estandares requeridos"),HttpStatus.BAD_REQUEST);
         }
         if(!passMatcher.find()){
-            return new ResponseEntity("Password no cumple con estandares requeridos",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Password no cumple con estandares requeridos"),HttpStatus.BAD_REQUEST);
         }
         if(usuarioServ.existsByNombreUsuario(nuevoUsuario.getNombreUsuario())){
-            return new ResponseEntity("Ese username ya existe", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Ese username ya existe"), HttpStatus.BAD_REQUEST);
         }
         if(usuarioServ.existsByEmail(nuevoUsuario.getEmail())){
-            return new ResponseEntity("Ese email ya existe",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(new Mensaje("Ese email ya existe"),HttpStatus.BAD_REQUEST);
         }
         Usuario usuario = new Usuario(nuevoUsuario.getNombreUsuario(),nuevoUsuario.getEmail(),
             passwordEncoder.encode(nuevoUsuario.getPassword()));
@@ -122,7 +122,7 @@ public class AuthController {
         }*/
         usuario.setRoles(roles);
         usuarioServ.save(usuario);
-        return new ResponseEntity("Usuario guardado",HttpStatus.OK);
+        return new ResponseEntity(new Mensaje("Usuario guardado"),HttpStatus.OK);
     }
     
     @PostMapping("/login")
