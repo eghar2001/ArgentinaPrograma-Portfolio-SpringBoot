@@ -157,6 +157,7 @@ public class AuthController {
         return new ResponseEntity(new Mensaje(username +" es admin"),HttpStatus.OK);    
     }
     
+    
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/usuario/traer")
     public List<Usuario> getUsuarios(){
@@ -170,13 +171,14 @@ public class AuthController {
     }
     
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/usuario/edit/{usernameActual}")
+    @PutMapping("/usuario/edit/{usernameActual}")
     public ResponseEntity<Mensaje> edit(@PathVariable String usernameActual , @RequestBody Usuario edittedUser){
         Usuario user = this.usuarioServ.getByNombreUsuario(usernameActual).get();
         if(user == null){
             return new ResponseEntity(new Mensaje(usernameActual+" no fue encontrado!"), HttpStatus.BAD_REQUEST);
         }
         edittedUser.setId(user.getId());
+        edittedUser.setRoles(user.getRoles());
         edittedUser.setPassword(this.passwordEncoder.encode(edittedUser.getPassword()));
         if (usernameActual.equals(edittedUser.getNombreUsuario()) ){
             if(user.getEmail().equals(edittedUser.getEmail())){                
@@ -190,7 +192,7 @@ public class AuthController {
                 this.usuarioServ.save(edittedUser);
                 return new ResponseEntity(new Mensaje(usernameActual+" fue editado!"), HttpStatus.OK);
             }
-        }else if(this.usuarioServ.existsByNombreUsuario(usernameActual)){
+        }else if(this.usuarioServ.existsByNombreUsuario(edittedUser.getNombreUsuario())){
             return new ResponseEntity(new Mensaje(edittedUser.getNombreUsuario()+" ya existe!"), HttpStatus.BAD_REQUEST);
         }
         else{
