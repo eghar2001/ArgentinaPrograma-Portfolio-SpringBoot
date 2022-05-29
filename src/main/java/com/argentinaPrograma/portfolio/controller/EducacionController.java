@@ -153,7 +153,6 @@ public  class EducacionController {
                 insti.setLogoUrl(eduDto.getFotoInstitucionUrl());
                 insti = this.instiServ.saveInstitucion(insti);
             } 
-        System.out.println(insti);
         return insti;  
     }
 
