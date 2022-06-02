@@ -4,7 +4,6 @@
  */
 package com.argentinaPrograma.portfolio.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +11,10 @@ import lombok.Setter;
  *
  * @author nahux
  */
-@Getter @Setter @AllArgsConstructor
+@Getter @Setter 
 public class Mensaje {
     private String mensaje;
+    public Mensaje(String msj){
+        this.mensaje = msj;
+    }
 }
